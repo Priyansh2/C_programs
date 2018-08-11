@@ -1,0 +1,155 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+struct node{
+    int data;
+    struct node*prev;
+    struct node *next;
+};
+
+struct node *split(struct node* head);
+
+struct node *merge(struct node* first , struct node*second)
+{//function to merge two doubly linked lists
+
+if(!first)//if first linked list is empty
+    return second;
+if(!second)//if second list is empty
+return first;
+
+if(first->data < second->data)
+{//pick the smaller value
+    first->next = merge(first->next,second);
+    first->next->prev = first;
+    first->prev = NULL;
+    return first;
+}
+
+else{
+second->next = merge(first,second->next);
+second->next->prev = second;
+second->prev = NULL;
+
+return second;
+}
+
+}
+
+struct node *sort(struct node *head)
+{
+
+
+
+
+
+
+
+
+void push(struct node**headref,int value)
+{//insertion at beginning of head node of dll
+    struct node *temp = (struct node*)malloc(sizeof(struct node));
+    temp->data = value;
+    temp->next = *headref;
+    temp->prev = NULL;
+
+    if(*headref!=NULL)
+        *headref->prev = temp;
+    *headref = temp;
+
+}
+
+void insertafter(struct node*prev_node , int data1)
+{//in this function we give node as prev. node and 
+    //we insert a new node after this prev. node
+
+    if(prev_node==NULL)
+    {
+        printf("the given previous node can't be NULL\n");
+        return ;
+    }
+
+    struct node* temp = (struct node*)malloc(sizeof(struct node));
+    temp->data = data1;
+    temp->next = prev_node->next;
+    prev_node->next = temp;
+    temp->prev = prev_node;
+
+    if(temp->next!=NULL)
+        temp->next->prev = temp;
+}
+
+void append(struct node**headref , int data1)
+{//insert a new node at end
+
+    struct node*temp = (struct node*)malloc(sizeof(struct node));
+
+    struct node*last = *headref;
+    temp->data = data1;
+    temp->next=NULL;
+    if(*headref==NULL)
+    {
+        temp->prev = NULL;
+        *headref = temp;
+        return ;
+    }
+
+    while(last->next!=NULL)
+        last = last->next;
+
+    last->next = temp;
+
+    temp->prev = last;
+    return ;
+}
+
+void delete(struct node**headref , struct node*del)
+{//here del is node to be deleted
+
+
+    if(*headref==NULL || del==NULL)//base case
+        return;
+    if(*headref==del)//if del is head node
+        *headref = del->next;
+    if(del->next!=NULL)//if del is not last node
+        del->next->prev =del->prev;
+
+    if(del->prev!=NULL)
+        del->prev->next = del->next;
+
+    free(del);
+    return ;
+}
+
+
+void forward_print(struct node*node,int flag)
+{
+    struct node *last;
+    struct node *first;
+    if(flag==1)
+    {
+        printf("\n traversal in forward direction \n");
+        while(node->next!=NULL)
+        {
+            printf("%d->",node->data);
+            last = node;
+            node = node->next;
+            first = node;
+        }
+
+        printf("%d\n",node->data);
+    }
+
+    else
+    {
+        printf("\n traversal in reverse direction \n");
+        while(first->prev!=NULL)
+        {
+            printf("%d->",first->data);
+            first=first->prev;
+        }
+        printf("%d\n",first->data);
+    }
+}
+
+
+
